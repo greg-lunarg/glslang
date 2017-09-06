@@ -82,52 +82,27 @@ gl_FragCoord origin is upper left
                               ExecutionMode 4 OriginUpperLeft
                               Source HLSL 500
                               Name 4  "main_in_spv"
-                              Name 6  "not_the_entry_point("
                               Name 10  "PS_OUTPUT"
                               MemberName 10(PS_OUTPUT) 0  "Color"
-                              Name 12  "@main_in_spv("
-                              Name 15  "psout"
                               Name 26  "@entryPointOutput.Color"
                               Name 29  "$Global"
                               MemberName 29($Global) 0  "also_not_the_entry_point"
-                              Name 31  ""
                               Decorate 26(@entryPointOutput.Color) Location 0
                               MemberDecorate 29($Global) 0 Offset 0
                               Decorate 29($Global) Block
-                              Decorate 31 DescriptorSet 0
                2:             TypeVoid
                3:             TypeFunction 2
                8:             TypeFloat 32
                9:             TypeVector 8(float) 4
    10(PS_OUTPUT):             TypeStruct 9(fvec4)
-              11:             TypeFunction 10(PS_OUTPUT)
-              14:             TypePointer Function 10(PS_OUTPUT)
               16:             TypeInt 32 1
-              17:     16(int) Constant 0
               18:    8(float) Constant 0
               19:    9(fvec4) ConstantComposite 18 18 18 18
-              20:             TypePointer Function 9(fvec4)
               25:             TypePointer Output 9(fvec4)
 26(@entryPointOutput.Color):     25(ptr) Variable Output
      29($Global):             TypeStruct 16(int)
-              30:             TypePointer Uniform 29($Global)
-              31:     30(ptr) Variable Uniform
   4(main_in_spv):           2 Function None 3
                5:             Label
-              27:10(PS_OUTPUT) FunctionCall 12(@main_in_spv()
-              28:    9(fvec4) CompositeExtract 27 0
-                              Store 26(@entryPointOutput.Color) 28
+                              Store 26(@entryPointOutput.Color) 19
                               Return
-                              FunctionEnd
-6(not_the_entry_point():           2 Function None 3
-               7:             Label
-                              Return
-                              FunctionEnd
-12(@main_in_spv():10(PS_OUTPUT) Function None 11
-              13:             Label
-       15(psout):     14(ptr) Variable Function
-              21:     20(ptr) AccessChain 15(psout) 17
-                              Store 21 19
-              22:10(PS_OUTPUT) Load 15(psout)
-                              ReturnValue 22
                               FunctionEnd

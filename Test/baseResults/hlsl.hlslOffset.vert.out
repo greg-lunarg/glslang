@@ -35,7 +35,6 @@ Shader version: 500
                               EntryPoint Vertex 4  "main"
                               Source HLSL 500
                               Name 4  "main"
-                              Name 6  "@main("
                               Name 15  "b"
                               MemberName 15(b) 0  "m0"
                               MemberName 15(b) 1  "m4"
@@ -48,7 +47,6 @@ Shader version: 500
                               MemberName 15(b) 8  "m76"
                               MemberName 15(b) 9  "m80"
                               MemberName 15(b) 10  "m96"
-                              Name 17  ""
                               Decorate 14 ArrayStride 16
                               MemberDecorate 15(b) 0 Offset 0
                               MemberDecorate 15(b) 1 Offset 4
@@ -62,7 +60,6 @@ Shader version: 500
                               MemberDecorate 15(b) 9 Offset 80
                               MemberDecorate 15(b) 10 Offset 96
                               Decorate 15(b) Block
-                              Decorate 17 DescriptorSet 0
                2:             TypeVoid
                3:             TypeFunction 2
                9:             TypeFloat 32
@@ -72,14 +69,7 @@ Shader version: 500
               13:     12(int) Constant 1
               14:             TypeArray 11(fvec2) 13
            15(b):             TypeStruct 9(float) 10(fvec3) 9(float) 10(fvec3) 10(fvec3) 11(fvec2) 9(float) 11(fvec2) 9(float) 9(float) 14
-              16:             TypePointer Uniform 15(b)
-              17:     16(ptr) Variable Uniform
          4(main):           2 Function None 3
                5:             Label
-               8:           2 FunctionCall 6(@main()
-                              Return
-                              FunctionEnd
-       6(@main():           2 Function None 3
-               7:             Label
                               Return
                               FunctionEnd
