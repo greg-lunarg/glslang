@@ -33,3 +33,8 @@ if(BUILD_TESTING)
             "Google Mock was not found - tests based on that will not build")
     endif()
 endif()
+
+if(ENABLE_HLSL)
+    add_subdirectory(spirv-tools)
+endif(ENABLE_HLSL)
+

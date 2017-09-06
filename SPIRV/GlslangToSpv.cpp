@@ -52,6 +52,13 @@ namespace spv {
 #endif
 }
 
+#ifdef ENABLE_HLSL
+    #include "spirv-tools/optimizer.hpp"
+    #include "message.h"
+#endif
+
+using namespace spvtools;
+
 // Glslang includes
 #include "../glslang/MachineIndependent/localintermediate.h"
 #include "../glslang/MachineIndependent/SymbolTable.h"
@@ -5950,7 +5957,36 @@ void GlslangToSpv(const glslang::TIntermediate& intermediate, std::vector<unsign
     TGlslangToSpvTraverser it(&intermediate, logger, *options);
     root->traverse(&it);
     it.finishSpv();
+
+#ifdef ENABLE_HLSL
+    //if (intermediate.getSource() == EShSourceHlsl) {
+    if (true) {
+        spv_target_env target_env = SPV_ENV_UNIVERSAL_1_2;
+
+        spvtools::Optimizer optimizer(target_env);
+        optimizer.SetMessageConsumer([](spv_message_level_t level,
+                                         const char* source,
+                                         const spv_position_t& position,
+                                         const char* message) {
+            std::cerr << StringifyMessage(level, source, position, message)
+                      << std::endl;
+        });
+        //std::vector<unsigned int> ospirv;
+        //it.dumpSpv(ospirv);
+        it.dumpSpv(spirv);
+
+        optimizer.RegisterPass(CreateInlineExhaustivePass());
+
+        (void) optimizer.Run(spirv.data(), spirv.size(), &spirv);
+
+        //std::move(ospirv.begin(), ospirv.end(), std::back_inserter(spirv));
+    }
+    else {
+        it.dumpSpv(spirv);
+    }
+#else
     it.dumpSpv(spirv);
+#endif
 
     glslang::GetThreadPoolAllocator().pop();
 }

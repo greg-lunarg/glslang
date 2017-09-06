@@ -42,7 +42,16 @@ endif(ENABLE_NV_EXTENSIONS)
 add_library(SPIRV STATIC ${SOURCES} ${HEADERS})
 set_property(TARGET SPIRV PROPERTY FOLDER glslang)
 set_property(TARGET SPIRV PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(SPIRV glslang)
+
+if (ENABLE_HLSL)
+    target_include_directories(SPIRV
+        PRIVATE ${spirv-tools_SOURCE_DIR}/include
+        PRIVATE ${spirv-tools_SOURCE_DIR}/source
+    )
+    target_link_libraries(SPIRV glslang SPIRV-Tools-opt)
+else()
+    target_link_libraries(SPIRV glslang)
+endif (ENABLE_HLSL)
 
 add_library(SPVRemapper STATIC ${SPVREMAP_SOURCES} ${SPVREMAP_HEADERS})
 set_property(TARGET SPVRemapper PROPERTY FOLDER glslang)
