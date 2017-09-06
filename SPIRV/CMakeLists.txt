@@ -43,19 +43,19 @@ add_library(SPIRV STATIC ${SOURCES} ${HEADERS})
 set_property(TARGET SPIRV PROPERTY FOLDER glslang)
 set_property(TARGET SPIRV PROPERTY POSITION_INDEPENDENT_CODE ON)
 
+add_library(SPVRemapper STATIC ${SPVREMAP_SOURCES} ${SPVREMAP_HEADERS})
+set_property(TARGET SPVRemapper PROPERTY FOLDER glslang)
+set_property(TARGET SPVRemapper PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 if (ENABLE_HLSL)
     target_include_directories(SPIRV
         PRIVATE ${spirv-tools_SOURCE_DIR}/include
         PRIVATE ${spirv-tools_SOURCE_DIR}/source
     )
-    target_link_libraries(SPIRV glslang SPIRV-Tools-opt)
+    target_link_libraries(SPIRV glslang SPIRV-Tools-opt SPVRemapper)
 else()
     target_link_libraries(SPIRV glslang)
 endif (ENABLE_HLSL)
-
-add_library(SPVRemapper STATIC ${SPVREMAP_SOURCES} ${SPVREMAP_HEADERS})
-set_property(TARGET SPVRemapper PROPERTY FOLDER glslang)
-set_property(TARGET SPVRemapper PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 if(WIN32)
     source_group("Source" FILES ${SOURCES} ${HEADERS})

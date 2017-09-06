@@ -55,6 +55,7 @@ namespace spv {
 #ifdef ENABLE_HLSL
     #include "spirv-tools/optimizer.hpp"
     #include "message.h"
+    #include "SPVRemapper.h"
 #endif
 
 using namespace spvtools;
@@ -5931,6 +5932,12 @@ void OutputSpvHex(const std::vector<unsigned int>& spirv, const char* baseName, 
     out.close();
 }
 
+#ifdef ENABLE_HLSL
+void errHandler(const std::string& str) {
+    std::cerr << str << std::endl;
+}
+#endif
+
 //
 // Set up the glslang traversal
 //
@@ -5960,8 +5967,9 @@ void GlslangToSpv(const glslang::TIntermediate& intermediate, std::vector<unsign
     it.dumpSpv(spirv);
 
 #ifdef ENABLE_HLSL
-    //if (intermediate.getSource() == EShSourceHlsl) {
-    if (true) {
+    // If from HLSL, run spirv-opt to "legalize" the SPIR-V for Vulkan
+    // eg. forward and remove memory writes of opaque types.
+    if (intermediate.getSource() == EShSourceHlsl) {
         spv_target_env target_env = SPV_ENV_UNIVERSAL_1_2;
 
         spvtools::Optimizer optimizer(target_env);
@@ -5984,9 +5992,17 @@ void GlslangToSpv(const glslang::TIntermediate& intermediate, std::vector<unsign
         optimizer.RegisterPass(CreateLocalMultiStoreElimPass());
         optimizer.RegisterPass(CreateInsertExtractElimPass());
         optimizer.RegisterPass(CreateAggressiveDCEPass());
-        //optimizer.RegisterPass(CreateCommonUniformElimPass());
+        // TODO(greg-lunarg): Add this when optimizing for size
+        // optimizer.RegisterPass(CreateCommonUniformElimPass());
 
-        (void) optimizer.Run(spirv.data(), spirv.size(), &spirv);
+        if (!optimizer.Run(spirv.data(), spirv.size(), &spirv))
+            return;
+
+        // Remove dead module-level objects: functions, types, vars
+        // TODO(greg-lunarg): Switch to spirv-opt versions when available
+        spv::spirvbin_t Remapper(0);
+        Remapper.registerErrorHandler(errHandler);
+        Remapper.remap(spirv, spv::spirvbin_t::DCE_ALL);
     }
 #endif
 
