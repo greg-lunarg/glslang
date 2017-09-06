@@ -5957,6 +5957,7 @@ void GlslangToSpv(const glslang::TIntermediate& intermediate, std::vector<unsign
     TGlslangToSpvTraverser it(&intermediate, logger, *options);
     root->traverse(&it);
     it.finishSpv();
+    it.dumpSpv(spirv);
 
 #ifdef ENABLE_HLSL
     //if (intermediate.getSource() == EShSourceHlsl) {
@@ -5971,21 +5972,22 @@ void GlslangToSpv(const glslang::TIntermediate& intermediate, std::vector<unsign
             std::cerr << StringifyMessage(level, source, position, message)
                       << std::endl;
         });
-        //std::vector<unsigned int> ospirv;
-        //it.dumpSpv(ospirv);
-        it.dumpSpv(spirv);
 
         optimizer.RegisterPass(CreateInlineExhaustivePass());
+        optimizer.RegisterPass(CreateLocalAccessChainConvertPass());
+        optimizer.RegisterPass(CreateLocalSingleBlockLoadStoreElimPass());
+        optimizer.RegisterPass(CreateLocalSingleStoreElimPass());
+        optimizer.RegisterPass(CreateInsertExtractElimPass());
+        optimizer.RegisterPass(CreateAggressiveDCEPass());
+        optimizer.RegisterPass(CreateDeadBranchElimPass());
+        optimizer.RegisterPass(CreateBlockMergePass());
+        optimizer.RegisterPass(CreateLocalMultiStoreElimPass());
+        optimizer.RegisterPass(CreateInsertExtractElimPass());
+        optimizer.RegisterPass(CreateAggressiveDCEPass());
+        //optimizer.RegisterPass(CreateCommonUniformElimPass());
 
         (void) optimizer.Run(spirv.data(), spirv.size(), &spirv);
-
-        //std::move(ospirv.begin(), ospirv.end(), std::back_inserter(spirv));
     }
-    else {
-        it.dumpSpv(spirv);
-    }
-#else
-    it.dumpSpv(spirv);
 #endif
 
     glslang::GetThreadPoolAllocator().pop();
