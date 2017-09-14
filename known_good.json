@@ -6,13 +6,6 @@
       "subrepo" : "KhronosGroup/SPIRV-Tools",
       "subdir" : "External/spriv-tools",
       "commit" : "c6dfc11880653f8291f92a20e8a464dd051ca50d"
-    },
-    {
-      "name" : "googletest",
-      "site" : "github",
-      "subrepo" : "google/googletest",
-      "subdir" : "External/googletest",
-      "commit" : "a33b6b091999d44f771761be03beb64d3af2350a"
     }
   ]
 }
