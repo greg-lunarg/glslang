@@ -54,7 +54,7 @@ def command_output(cmd, directory, fail_ok=False):
     return stdout
 
 
-def command_retval(cmd, directory, fail_ok=False):
+def command_retval(cmd, directory):
     """Runs a command in a directory and returns its standard output stream.
 
     Captures the standard error stream.
@@ -65,8 +65,6 @@ def command_retval(cmd, directory, fail_ok=False):
                          cwd=directory,
                          stdout=subprocess.PIPE)
     (stdout, _) = p.communicate()
-    if p.returncode != 0 and not fail_ok:
-        raise RuntimeError('Failed to run {} in {}'.format(cmd, directory))
     return p.returncode
 
 
@@ -98,7 +96,7 @@ class GoodCommit(object):
 
     def AddRemote(self):
         """Add the remote 'known-good' if it does not exist."""
-        if command_retval(['git', 'remote', 'show', 'known-good'], self.subdir, fail_ok=True) != 0:
+        if command_retval(['git', 'remote', 'show', 'known-good'], self.subdir) != 0:
             command_output(['git', 'remote', 'add', 'known-good', self.GetUrl()], self.subdir)
 
     def HasCommit(self):
