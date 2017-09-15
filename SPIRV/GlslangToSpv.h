@@ -48,7 +48,7 @@
 namespace glslang {
 
 struct SpvOptions {
-    SpvOptions() : generateDebugInfo(false), disableOptimizer(false) { }
+    SpvOptions() : generateDebugInfo(false), disableOptimizer(true) { }
     bool generateDebugInfo;
     bool disableOptimizer;
 };

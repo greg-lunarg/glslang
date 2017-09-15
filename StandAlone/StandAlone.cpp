@@ -867,10 +867,8 @@ void CompileAndLinkShaderUnits(std::vector<ShaderCompUnit> compUnits)
                     std::string warningsErrors;
                     spv::SpvBuildLogger logger;
                     glslang::SpvOptions spvOptions;
-                    if (Options & EOptionDebug)
-                        spvOptions.generateDebugInfo = true;
-                    if (Options & EOptionOptimizeDisable)
-                        spvOptions.disableOptimizer = true;
+                    spvOptions.generateDebugInfo = Options & EOptionDebug;
+                    spvOptions.disableOptimizer = Options & EOptionOptimizeDisable;
                     glslang::GlslangToSpv(*program.getIntermediate((EShLanguage)stage), spirv, &logger, &spvOptions);
 
                     // Dump the spv to a file or stdout, etc., but only if not doing
