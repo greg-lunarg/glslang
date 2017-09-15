@@ -198,7 +198,8 @@ public:
             const std::string shaderName, const std::string& code,
             const std::string& entryPointName, EShMessages controls,
             bool flattenUniformArrays = false,
-            EShTextureSamplerTransformMode texSampTransMode = EShTexSampTransKeep)
+            EShTextureSamplerTransformMode texSampTransMode = EShTexSampTransKeep,
+            bool disableOptimizer = true)
     {
         const EShLanguage kind = GetShaderStage(GetSuffix(shaderName));
 
@@ -217,8 +218,10 @@ public:
 
         if (success && (controls & EShMsgSpvRules)) {
             std::vector<uint32_t> spirv_binary;
+            glslang::SpvOptions options;
+            options.disableOptimizer = disableOptimizer;
             glslang::GlslangToSpv(*program.getIntermediate(kind),
-                                  spirv_binary, &logger);
+                                  spirv_binary, &logger, &options);
 
             std::ostringstream disassembly_stream;
             spv::Parameterize();
@@ -381,7 +384,8 @@ public:
                                  Source source,
                                  Semantics semantics,
                                  Target target,
-                                 const std::string& entryPointName="")
+                                 const std::string& entryPointName="",
+                                 const bool disableOptimizer = true)
     {
         const std::string inputFname = testDir + "/" + testName;
         const std::string expectedOutputFname =
@@ -392,7 +396,7 @@ public:
         tryLoadFile(expectedOutputFname, "expected output", &expectedOutput);
 
         const EShMessages controls = DeriveOptions(source, semantics, target);
-        GlslangResult result = compileAndLink(testName, input, entryPointName, controls);
+        GlslangResult result = compileAndLink(testName, input, entryPointName, controls, false, EShTexSampTransKeep, disableOptimizer);
 
         // Generate the hybrid output in the way of glslangValidator.
         std::ostringstream stream;
