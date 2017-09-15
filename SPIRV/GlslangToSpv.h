@@ -48,8 +48,9 @@
 namespace glslang {
 
 struct SpvOptions {
-    SpvOptions() : generateDebugInfo(false) { }
+    SpvOptions() : generateDebugInfo(false), disableOptimizer(false) { }
     bool generateDebugInfo;
+    bool disableOptimizer;
 };
 
 void GetSpirvVersion(std::string&);

@@ -94,6 +94,7 @@ enum TOptions {
     EOptionHlslIoMapping        = (1 << 24),
     EOptionAutoMapLocations     = (1 << 25),
     EOptionDebug                = (1 << 26),
+    EOptionOptimizeDisable      = (1 << 27),
 };
 
 //
@@ -524,6 +525,11 @@ void ProcessArguments(std::vector<std::unique_ptr<glslang::TWorkItem>>& workItem
             case 'I':
                 IncludeDirectoryList.push_back(getStringOperand("-I<dir> include path"));
                 break;
+            case 'O':
+                if (argv[0][2] != 'd')
+                    Error("unknown -O option");
+                Options |= EOptionOptimizeDisable;
+                break;
             case 'S':
                 if (argc <= 1)
                     Error("no <stage> specified for -S");
@@ -860,6 +866,8 @@ void CompileAndLinkShaderUnits(std::vector<ShaderCompUnit> compUnits)
                     glslang::SpvOptions spvOptions;
                     if (Options & EOptionDebug)
                         spvOptions.generateDebugInfo = true;
+                    if (Options & EOptionOptimizeDisable)
+                        spvOptions.disableOptimizer = true;
                     glslang::GlslangToSpv(*program.getIntermediate((EShLanguage)stage), spirv, &logger, &spvOptions);
 
                     // Dump the spv to a file or stdout, etc., but only if not doing

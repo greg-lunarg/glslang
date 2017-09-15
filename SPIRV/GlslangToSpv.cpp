@@ -5994,7 +5994,8 @@ void GlslangToSpv(const glslang::TIntermediate& intermediate, std::vector<unsign
 #ifdef ENABLE_HLSL
     // If from HLSL, run spirv-opt to "legalize" the SPIR-V for Vulkan
     // eg. forward and remove memory writes of opaque types.
-    if (intermediate.getSource() == EShSourceHlsl) {
+    if (intermediate.getSource() == EShSourceHlsl &&
+            !options->disableOptimizer) {
         spv_target_env target_env = SPV_ENV_UNIVERSAL_1_2;
 
         spvtools::Optimizer optimizer(target_env);
