@@ -526,6 +526,9 @@ void ProcessArguments(std::vector<std::unique_ptr<glslang::TWorkItem>>& workItem
                 IncludeDirectoryList.push_back(getStringOperand("-I<dir> include path"));
                 break;
             case 'O':
+                // The -Od option is "hidden" since it can cause illegal SPIR-V
+                // to be emitted. It exists to enable testing of non-optimized
+                // SPIRV path.
                 if (argv[0][2] != 'd')
                     Error("unknown -O option");
                 Options |= EOptionOptimizeDisable;
