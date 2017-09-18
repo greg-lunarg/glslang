@@ -385,11 +385,12 @@ public:
                                  Semantics semantics,
                                  Target target,
                                  const std::string& entryPointName="",
+                                 const std::string& baseDir="/baseResults/",
                                  const bool disableOptimizer = true)
     {
         const std::string inputFname = testDir + "/" + testName;
         const std::string expectedOutputFname =
-            testDir + "/baseResults/" + testName + ".out";
+            testDir + baseDir + testName + ".out";
         std::string input, expectedOutput;
 
         tryLoadFile(inputFname, "input", &input);
