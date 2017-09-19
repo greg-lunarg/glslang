@@ -35,6 +35,11 @@ if(BUILD_TESTING)
 endif()
 
 if(ENABLE_HLSL)
-    add_subdirectory(spirv-tools)
+  if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/spirv-tools)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/spirv-tools spirv-tools)
+  endif()
+  if (NOT TARGET SPIRV-Tools-opt)
+    message(FATAL_ERROR "SPIRV-Tools was not found - required for compilation")
+  endif()
 endif(ENABLE_HLSL)
 
