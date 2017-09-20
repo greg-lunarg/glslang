@@ -52,13 +52,15 @@ namespace spv {
 #endif
 }
 
-#ifdef ENABLE_HLSL
+#ifdef ENABLE_OPT
     #include "spirv-tools/optimizer.hpp"
     #include "message.h"
     #include "SPVRemapper.h"
 #endif
 
+#ifdef ENABLE_OPT
 using namespace spvtools;
+#endif
 
 // Glslang includes
 #include "../glslang/MachineIndependent/localintermediate.h"
@@ -5957,7 +5959,7 @@ void OutputSpvHex(const std::vector<unsigned int>& spirv, const char* baseName, 
     out.close();
 }
 
-#ifdef ENABLE_HLSL
+#ifdef ENABLE_OPT
 void errHandler(const std::string& str) {
     std::cerr << str << std::endl;
 }
@@ -5991,7 +5993,7 @@ void GlslangToSpv(const glslang::TIntermediate& intermediate, std::vector<unsign
     it.finishSpv();
     it.dumpSpv(spirv);
 
-#ifdef ENABLE_HLSL
+#ifdef ENABLE_OPT
     // If from HLSL, run spirv-opt to "legalize" the SPIR-V for Vulkan
     // eg. forward and remove memory writes of opaque types.
     if (intermediate.getSource() == EShSourceHlsl &&
