@@ -60,6 +60,7 @@ Builder::Builder(unsigned int spvVersion, unsigned int magicNumber, SpvBuildLogg
     sourceVersion(0),
     sourceFileStringId(NoResult),
     currentLine(0),
+    currentFile(nullptr),
     emitOpLines(false),
     addressModel(AddressingModelLogical),
     memoryModel(MemoryModelGLSL450),
@@ -89,12 +90,31 @@ Id Builder::import(const char* name)
 
 // Emit an OpLine if we've been asked to emit OpLines and the line number
 // has changed since the last time, and is a valid line number.
-void Builder::setLine(int lineNum)
+void Builder::setLine(int lineNum, const char* filename)
 {
-    if (lineNum != 0 && lineNum != currentLine) {
+    if (lineNum != 0 && lineNum != currentLine ||
+            filename != nullptr &&
+            (currentFile == nullptr || strcmp(filename, currentFile) != 0)) {
         currentLine = lineNum;
-        if (emitOpLines)
-            addLine(sourceFileStringId, currentLine, 0);
+        currentFile = filename;
+        if (emitOpLines) {
+            if (filename == nullptr) {
+                addLine(sourceFileStringId, currentLine, 0);
+            } else {
+                auto sItr = stringIds.find(filename);
+                if (sItr != stringIds.end()) {
+                    addLine(sItr->second, currentLine, 0);
+                } else {
+                    Instruction* fileString =
+                          new Instruction(getUniqueId(), NoType, OpString);
+                    fileString->addStringOperand(filename);
+                    unsigned int stringId = fileString->getResultId();
+                    strings.push_back(std::unique_ptr<Instruction>(fileString));
+                    addLine(stringId, currentLine, 0);
+                    stringIds[filename] = stringId;
+                }
+            }
+        }
     }
 }
 

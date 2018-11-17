@@ -229,7 +229,10 @@ inline const TString String(const int i, const int /*base*/ = 10)
 #endif
 
 struct TSourceLoc {
-    void init() { name = nullptr; string = 0; line = 0; column = 0; }
+    void init()
+    {
+        name = nullptr; filename = nullptr;  string = 0; line = 0; column = 0;
+    }
     void init(int stringNum) { init(); string = stringNum; }
     // Returns the name if it exists. Otherwise, returns the string number.
     std::string getStringNameOrNum(bool quoteStringName = true) const
@@ -239,6 +242,7 @@ struct TSourceLoc {
         return std::to_string((long long)string);
     }
     const char* name; // descriptive name for this string
+    const char* filename; // file name if active
     int string;
     int line;
     int column;

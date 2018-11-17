@@ -106,9 +106,10 @@ public:
         return id;
     }
 
-    // Log the current line, and if different than the last one,
-    // issue a new OpLine, using the current file name.
-    void setLine(int line);
+    // Log the current line and file, and if different than the last one,
+    // issue a new OpLine using the new line and file name. If filename
+    // is null, use current source file name.
+    void setLine(int line, const char* filename);
     // Low-level OpLine. See setLine() for a layered helper.
     void addLine(Id fileName, int line, int column);
 
@@ -658,6 +659,7 @@ public:
     spv::Id sourceFileStringId;
     std::string sourceText;
     int currentLine;
+    const char* currentFile;
     bool emitOpLines;
     std::set<std::string> extensions;
     std::vector<const char*> sourceExtensions;
@@ -694,6 +696,9 @@ public:
 
     // Our loop stack.
     std::stack<LoopBlocks> loops;
+
+    // map from strings to their string ids
+    std::unordered_map<const char*, unsigned int> stringIds;
 
     // The stream for outputting warnings and errors.
     SpvBuildLogger* logger;
