@@ -665,6 +665,7 @@ public:
     void setSourceFile(const char* file) { if (file != nullptr) sourceFile = file; }
     const std::string& getSourceFile() const { return sourceFile; }
     void addSourceText(const char* text) { sourceText = sourceText + text; }
+    void filterSourceText(char c) { sourceText.erase(std::remove(sourceText.begin(), sourceText.end(), c), sourceText.end()); }
     const std::string& getSourceText() const { return sourceText; }
     void addProcesses(const std::vector<std::string>& p)
     {

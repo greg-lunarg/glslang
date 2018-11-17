@@ -201,6 +201,7 @@ public:
             bool flattenUniformArrays = false,
             EShTextureSamplerTransformMode texSampTransMode = EShTexSampTransKeep,
             bool enableOptimizer = false,
+            bool enableDebug = false,
             bool automap = true)
     {
         const EShLanguage stage = GetShaderStage(GetSuffix(shaderName));
@@ -243,6 +244,7 @@ public:
             std::vector<uint32_t> spirv_binary;
             glslang::SpvOptions options;
             options.disableOptimizer = !enableOptimizer;
+            options.generateDebugInfo = enableDebug;
             options.validate = true;
             glslang::GlslangToSpv(*program.getIntermediate(stage),
                                   spirv_binary, &logger, &options);
@@ -417,7 +419,8 @@ public:
                                  bool automap = true,
                                  const std::string& entryPointName="",
                                  const std::string& baseDir="/baseResults/",
-                                 const bool enableOptimizer = false)
+                                 const bool enableOptimizer = false,
+                                 const bool enableDebug = false)
     {
         const std::string inputFname = testDir + "/" + testName;
         const std::string expectedOutputFname =
@@ -430,8 +433,10 @@ public:
         EShMessages controls = DeriveOptions(source, semantics, target);
         if (enableOptimizer)
             controls = static_cast<EShMessages>(controls & ~EShMsgHlslLegalization);
+        if (enableDebug)
+            controls = static_cast<EShMessages>(controls | EShMsgDebugInfo);
         GlslangResult result = compileAndLink(testName, input, entryPointName, controls, clientTargetVersion, false,
-                                              EShTexSampTransKeep, enableOptimizer, automap);
+                                              EShTexSampTransKeep, enableOptimizer, enableDebug, automap);
 
         // Generate the hybrid output in the way of glslangValidator.
         std::ostringstream stream;

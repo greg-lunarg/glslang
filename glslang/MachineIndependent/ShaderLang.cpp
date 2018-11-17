@@ -881,6 +881,8 @@ bool ProcessDeferred(
         intermediate.setSourceFile(names[numPre]);
         for (int s = 0; s < numStrings; ++s)
             intermediate.addSourceText(strings[numPre + s]);
+        // Filter carriage returns which manifest during testing
+        intermediate.filterSourceText('\r');
     }
     SetupBuiltinSymbolTable(version, profile, spvVersion, source);
 
