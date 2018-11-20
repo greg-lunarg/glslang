@@ -242,7 +242,7 @@ struct TSourceLoc {
         return std::to_string((long long)string);
     }
     const char* name; // descriptive name for this string
-    const char* filename; // file name if active
+    const char* filename; // HLSL-style file name, if seen
     int string;
     int line;
     int column;

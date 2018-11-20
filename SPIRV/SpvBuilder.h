@@ -106,9 +106,15 @@ public:
         return id;
     }
 
-    // Log the current line and file, and if different than the last one,
-    // issue a new OpLine using the new line and file name. If filename
-    // is null, use current source file name.
+    // Generate OpLine for GLSL-style line directives (ie no filenames):
+    // Log the current line, and if different than the last one,
+    // issue a new OpLine using the new line and current source file name.
+    void setLine(int line);
+
+    // If filename null, generate OpLine for GLSL-style line directives (above),
+    // else do HLSL-style: Log the current line and file, and if different
+    // than the last one, issue a new OpLine using the new line and file
+    // name.
     void setLine(int line, const char* filename);
     // Low-level OpLine. See setLine() for a layered helper.
     void addLine(Id fileName, int line, int column);
