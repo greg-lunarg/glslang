@@ -170,10 +170,11 @@ public:
     // for #line override in filename based parsing
     void setFile(const char* filename)
     {
+        TString* fn_tstr = NewPoolTString(filename);
         logicalSourceLoc.name = filename;
-        logicalSourceLoc.filename = filename;
+        logicalSourceLoc.filename = fn_tstr;
         loc[getLastValidSourceIndex()].name = filename;
-        loc[getLastValidSourceIndex()].filename = filename;
+        loc[getLastValidSourceIndex()].filename = fn_tstr;
     }
 
     void setFile(const char* filename, int i)

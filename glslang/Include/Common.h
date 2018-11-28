@@ -241,8 +241,14 @@ struct TSourceLoc {
             return quoteStringName ? ("\"" + std::string(name) + "\"") : name;
         return std::to_string((long long)string);
     }
+    const char* getFilename() const
+    {
+        if (filename == nullptr)
+            return nullptr;
+        return filename->c_str();
+    }
     const char* name; // descriptive name for this string
-    const char* filename; // HLSL-style file name, if seen
+    TString* filename; // HLSL-style file name, if seen
     int string;
     int line;
     int column;
