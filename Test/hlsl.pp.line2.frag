@@ -1,15 +1,14 @@
-#line 1 "C:\\Users\\Greg\\shaders\\line\\foo4.frag"
-Texture2D g_tColor [ 128 ] ;
+#line 1 "foo.frag"
+Texture2D g_tColor[ 128 ] ;
 
-layout ( push_constant ) cbuffer PerViewConstantBuffer_t
+layout (push_constant) cbuffer PerViewConstantBuffer_t
 {
-    uint g_nDataIdx ;
-    uint g_nDataIdx2 ;
-    bool g_B ;
+    uint g_nDataIdx;
+    uint g_nDataIdx2;
+    bool g_B;
 } ;
 
-#line 12
-SamplerState g_sAniso ;
+SamplerState g_sAniso;
 
 struct PS_INPUT
 {
@@ -25,18 +24,17 @@ PS_OUTPUT MainPs ( PS_INPUT i )
 {
     PS_OUTPUT ps_output ;
 
-    uint u ;
-    if ( g_B )
-
-
-#line 1 "C:\\Users\\Greg\\shaders\\line\\u1.h"
-    u = g_nDataIdx ;
-
-
-#line 31 "C:\\Users\\Greg\\shaders\\line\\foo4.frag"
+    uint u;
+#line 47
+    if (g_B)
+#line 3 "foo.h"
+        u = g_nDataIdx;
     else
-    u = g_nDataIdx2 ;
-    ps_output . vColor = g_tColor [ u ] . Sample ( g_sAniso , i . vTextureCoords . xy ) ;
+#line 67
+        u = g_nDataIdx2;
+#line 7 "foo2.h"
+    ps_output . vColor = g_tColor [ u ] . Sample ( g_sAniso , i . vTextureCoords . xy );
+#line 105
     return ps_output ;
 }
 
