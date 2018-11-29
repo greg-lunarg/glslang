@@ -88,9 +88,9 @@ Id Builder::import(const char* name)
     return import->getResultId();
 }
 
-// Emit instruction for GLSL-style line directives (ie. no filenames seen):
-// emit an OpLine if we've been asked to emit OpLines and the line number
-// has changed since the last time, and is a valid line number.
+// Emit instruction for non-filename-based #line directives (ie. no filename
+// seen yet): emit an OpLine if we've been asked to emit OpLines and the line
+// number has changed since the last time, and is a valid line number.
 void Builder::setLine(int lineNum)
 {
     if (lineNum != 0 && lineNum != currentLine) {
@@ -100,9 +100,9 @@ void Builder::setLine(int lineNum)
     }
 }
 
-// If no filename seen, do GLSL-style line emit. Else do HLSL-style: emit an
-// OpLine if we've been asked to emit OpLines and the line number or filename
-// has changed since the last time, and is a valid line number.
+// If no filename, do non-filename-based #line emit. Else do filename-based emit.
+// Emit OpLine if we've been asked to emit OpLines and the line number or filename
+// has changed since the last time, and line number is valid.
 void Builder::setLine(int lineNum, const char* filename)
 {
     if (filename == nullptr) {

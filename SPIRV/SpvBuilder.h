@@ -106,13 +106,13 @@ public:
         return id;
     }
 
-    // Generate OpLine for GLSL-style line directives (ie no filenames):
-    // Log the current line, and if different than the last one,
+    // Generate OpLine for non-filename-based #line directives (ie no filename
+    // seen yet): Log the current line, and if different than the last one,
     // issue a new OpLine using the new line and current source file name.
     void setLine(int line);
 
-    // If filename null, generate OpLine for GLSL-style line directives (above),
-    // else do HLSL-style: Log the current line and file, and if different
+    // If filename null, generate OpLine for non-filename-based line directives,
+    // else do filename-based: Log the current line and file, and if different
     // than the last one, issue a new OpLine using the new line and file
     // name.
     void setLine(int line, const char* filename);

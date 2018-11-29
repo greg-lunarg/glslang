@@ -248,7 +248,7 @@ struct TSourceLoc {
         return filename->c_str();
     }
     const char* name; // descriptive name for this string
-    TString* filename; // HLSL-style file name, if seen
+    TString* filename; // source filename, if filename-based #line seen
     int string;
     int line;
     int column;
