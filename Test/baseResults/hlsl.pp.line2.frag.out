@@ -8,7 +8,7 @@ hlsl.pp.line2.frag
                               MemoryModel Logical GLSL450
                               EntryPoint Fragment 5  "MainPs" 71 75
                               ExecutionMode 5 OriginUpperLeft
-               1:             String  ""
+               1:             String  "hlsl.pp.line2.frag"
               17:             String  "foo.frag"
               32:             String  "foo.h"
               42:             String  "foo2.h"

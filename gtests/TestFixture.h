@@ -177,12 +177,18 @@ public:
     // and modifies |shader| on success.
     bool compile(glslang::TShader* shader, const std::string& code,
                  const std::string& entryPointName, EShMessages controls,
-                 const TBuiltInResource* resources=nullptr)
+                 const TBuiltInResource* resources=nullptr,
+                 const std::string* shaderName=nullptr)
     {
         const char* shaderStrings = code.data();
         const int shaderLengths = static_cast<int>(code.size());
 
-        shader->setStringsWithLengths(&shaderStrings, &shaderLengths, 1);
+        if ((controls & EShMsgDebugInfo) && shaderName != nullptr) {
+            const char* shaderNames = shaderName->c_str();
+            shader->setStringsWithLengthsAndNames(
+                    &shaderStrings, &shaderLengths, &shaderNames, 1);
+        } else
+            shader->setStringsWithLengths(&shaderStrings, &shaderLengths, 1);
         if (!entryPointName.empty()) shader->setEntryPoint(entryPointName.c_str());
         return shader->parse(
                 (resources ? resources : &glslang::DefaultTBuiltInResource),
@@ -232,7 +238,8 @@ public:
             }
         }
 
-        bool success = compile(&shader, code, entryPointName, controls);
+        bool success = compile(
+                &shader, code, entryPointName, controls, nullptr, &shaderName);
 
         glslang::TProgram program;
         program.addShader(&shader);
