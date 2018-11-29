@@ -182,9 +182,10 @@ public:
     {
         const char* shaderStrings = code.data();
         const int shaderLengths = static_cast<int>(code.size());
+        const char* shaderNames = nullptr;
 
         if ((controls & EShMsgDebugInfo) && shaderName != nullptr) {
-            const char* shaderNames = shaderName->data();
+            shaderNames = shaderName->data();
             shader->setStringsWithLengthsAndNames(
                     &shaderStrings, &shaderLengths, &shaderNames, 1);
         } else
