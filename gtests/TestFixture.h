@@ -184,7 +184,7 @@ public:
         const int shaderLengths = static_cast<int>(code.size());
 
         if ((controls & EShMsgDebugInfo) && shaderName != nullptr) {
-            const char* shaderNames = shaderName->c_str();
+            const char* shaderNames = shaderName->data();
             shader->setStringsWithLengthsAndNames(
                     &shaderStrings, &shaderLengths, &shaderNames, 1);
         } else
@@ -201,7 +201,7 @@ public:
     // during the process. If the target includes SPIR-V, also disassembles
     // the result and returns disassembly text.
     GlslangResult compileAndLink(
-            const std::string shaderName, const std::string& code,
+            const std::string& shaderName, const std::string& code,
             const std::string& entryPointName, EShMessages controls,
             glslang::EShTargetClientVersion clientTargetVersion,
             bool flattenUniformArrays = false,
