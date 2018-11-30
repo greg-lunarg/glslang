@@ -77,9 +77,11 @@ public:
     void setSourceFile(const std::string& file)
     {
         Instruction* fileString = new Instruction(getUniqueId(), NoType, OpString);
-        fileString->addStringOperand(file.c_str());
+        const char* file_c_str = file.c_str();
+        fileString->addStringOperand(file_c_str);
         sourceFileStringId = fileString->getResultId();
         strings.push_back(std::unique_ptr<Instruction>(fileString));
+        stringIds[file_c_str] = sourceFileStringId;
     }
     void setSourceText(const std::string& text) { sourceText = text; }
     void addSourceExtension(const char* ext) { sourceExtensions.push_back(ext); }
@@ -704,7 +706,7 @@ public:
     std::stack<LoopBlocks> loops;
 
     // map from strings to their string ids
-    std::unordered_map<const char*, unsigned int> stringIds;
+    std::unordered_map<std::string, unsigned int> stringIds;
 
     // The stream for outputting warnings and errors.
     SpvBuildLogger* logger;

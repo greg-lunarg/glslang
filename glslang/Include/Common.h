@@ -231,24 +231,26 @@ inline const TString String(const int i, const int /*base*/ = 10)
 struct TSourceLoc {
     void init()
     {
-        name = nullptr; filename = nullptr;  string = 0; line = 0; column = 0;
+        name = nullptr; string = 0; line = 0; column = 0;
     }
     void init(int stringNum) { init(); string = stringNum; }
     // Returns the name if it exists. Otherwise, returns the string number.
     std::string getStringNameOrNum(bool quoteStringName = true) const
     {
-        if (name != nullptr)
-            return quoteStringName ? ("\"" + std::string(name) + "\"") : name;
+        if (name != nullptr) {
+          TString qstr = quoteStringName ? ("\"" + *name + "\"") : *name;
+          std::string ret_str(qstr.c_str());
+          return ret_str;
+        }
         return std::to_string((long long)string);
     }
     const char* getFilename() const
     {
-        if (filename == nullptr)
+        if (name == nullptr)
             return nullptr;
-        return filename->c_str();
+        return name->c_str();
     }
-    const char* name; // descriptive name for this string
-    TString* filename; // source filename, if filename-based #line seen
+    TString* name; // descriptive name for this string
     int string;
     int line;
     int column;

@@ -548,9 +548,9 @@ protected:
               scanner.setLine(startLoc.line);
               scanner.setString(startLoc.string);
 
-              scanner.setFile(startLoc.name, 0);
-              scanner.setFile(startLoc.name, 1);
-              scanner.setFile(startLoc.name, 2);
+              scanner.setFile(startLoc.name->c_str(), 0);
+              scanner.setFile(startLoc.name->c_str(), 1);
+              scanner.setFile(startLoc.name->c_str(), 2);
         }
 
         // tInput methods:

@@ -65,7 +65,7 @@ public:
         }
         if (names != nullptr) {
             for (int i = 0; i < numSources; ++i)
-                loc[i].name = names[i];
+                loc[i].name = names[i] ? NewPoolTString(names[i]) : nullptr;
         }
         loc[currentSource].line = 1;
         logicalSourceLoc.init(1);
@@ -171,18 +171,17 @@ public:
     void setFile(const char* filename)
     {
         TString* fn_tstr = NewPoolTString(filename);
-        logicalSourceLoc.name = filename;
-        logicalSourceLoc.filename = fn_tstr;
-        loc[getLastValidSourceIndex()].name = filename;
-        loc[getLastValidSourceIndex()].filename = fn_tstr;
+        logicalSourceLoc.name = fn_tstr;
+        loc[getLastValidSourceIndex()].name = fn_tstr;
     }
 
     void setFile(const char* filename, int i)
     {
+        TString* fn_tstr = NewPoolTString(filename);
         if (i == getLastValidSourceIndex()) {
-            logicalSourceLoc.name = filename;
+            logicalSourceLoc.name = fn_tstr;
         }
-        loc[i].name = filename;
+        loc[i].name = fn_tstr;
     }
 
     void setString(int newString)
