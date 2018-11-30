@@ -533,7 +533,7 @@ protected:
               prologue_(prologue),
               epilogue_(epilogue),
               includedFile_(includedFile),
-              scanner(3, strings, lengths, names, 0, 0, true),
+              scanner(3, strings, lengths, nullptr, 0, 0, true),
               prevScanner(nullptr),
               stringInput(pp, scanner)
         {
