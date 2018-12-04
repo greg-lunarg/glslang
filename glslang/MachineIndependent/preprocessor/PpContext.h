@@ -590,8 +590,6 @@ protected:
         const char* strings[3];
         // Length of str_, passed to scanner constructor.
         size_t lengths[3];
-        // String names
-        const char* names[3];
         // Scans over str_.
         TInputScanner scanner;
         // The previous effective scanner before the scanner in this instance
