@@ -65,7 +65,7 @@ public:
         }
         if (names != nullptr) {
             for (int i = 0; i < numSources; ++i)
-                loc[i].name = names[i] ? NewPoolTString(names[i]) : nullptr;
+                loc[i].name = names[i] != nullptr ? NewPoolTString(names[i]) : nullptr;
         }
         loc[currentSource].line = 1;
         logicalSourceLoc.init(1);

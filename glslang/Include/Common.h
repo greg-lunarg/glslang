@@ -238,9 +238,9 @@ struct TSourceLoc {
     std::string getStringNameOrNum(bool quoteStringName = true) const
     {
         if (name != nullptr) {
-          TString qstr = quoteStringName ? ("\"" + *name + "\"") : *name;
-          std::string ret_str(qstr.c_str());
-          return ret_str;
+            TString qstr = quoteStringName ? ("\"" + *name + "\"") : *name;
+            std::string ret_str(qstr.c_str());
+            return ret_str;
         }
         return std::to_string((long long)string);
     }
