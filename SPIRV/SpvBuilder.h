@@ -706,7 +706,7 @@ public:
     std::stack<LoopBlocks> loops;
 
     // map from strings to their string ids
-    std::unordered_map<std::string, unsigned int> stringIds;
+    std::unordered_map<std::string, spv::Id> stringIds;
 
     // The stream for outputting warnings and errors.
     SpvBuildLogger* logger;

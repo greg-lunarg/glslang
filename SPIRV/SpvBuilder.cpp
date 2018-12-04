@@ -123,7 +123,7 @@ void Builder::setLine(int lineNum, const char* filename)
                 Instruction* fileString =
                       new Instruction(getUniqueId(), NoType, OpString);
                 fileString->addStringOperand(filename);
-                unsigned int stringId = fileString->getResultId();
+                spv::Id stringId = fileString->getResultId();
                 strings.push_back(std::unique_ptr<Instruction>(fileString));
                 addLine(stringId, currentLine, 0);
                 stringIds[filename] = stringId;
