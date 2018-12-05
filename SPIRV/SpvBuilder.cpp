@@ -110,7 +110,7 @@ void Builder::setLine(int lineNum, const char* filename)
         return;
     }
     if ((lineNum != 0 && lineNum != currentLine) || currentFile == nullptr ||
-            strcmp(filename, currentFile) != 0) {
+            strncmp(filename, currentFile, strlen(currentFile) + 1) != 0) {
         currentLine = lineNum;
         currentFile = filename;
         if (emitOpLines) {
