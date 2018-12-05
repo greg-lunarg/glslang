@@ -132,11 +132,13 @@ PS_OUTPUT MainPs ( PS_INPUT i )
                                 Branch 85
               85:             Label
              114:     18(int) Phi 89 86 91 87
+                              Line 17 33 0
               93:     50(ptr) AccessChain 48(g_tColor) 114
               94:          44 Load 93
               95:          53 Load 55(g_sAniso)
               96:          57 SampledImage 94 95
               99:   11(fvec4) ImageSampleImplicitLod 96 71
+                              Line 17 25 0
                               Store 74(@entryPointOutput.vColor) 99
                               Return
                               FunctionEnd
