@@ -2843,7 +2843,8 @@ void Builder::createConditionalBranch(Id condition, Block* thenBlock, Block* els
 // OpSource
 // [OpSourceContinued]
 // ...
-void Builder::dumpSourceInstructions(std::vector<unsigned int>& out) const
+void Builder::dumpSourceInstructions(const spv::Id fileId, const std::string& text,
+                                     std::vector<unsigned int>& out) const
 {
     const int maxWordCount = 0xFFFF;
     const int opSourceWordCount = 4;
@@ -2855,14 +2856,14 @@ void Builder::dumpSourceInstructions(std::vector<unsigned int>& out) const
         sourceInst.addImmediateOperand(source);
         sourceInst.addImmediateOperand(sourceVersion);
         // File operand
-        if (sourceFileStringId != NoResult) {
-            sourceInst.addIdOperand(sourceFileStringId);
+        if (fileId != NoResult) {
+            sourceInst.addIdOperand(fileId);
             // Source operand
-            if (sourceText.size() > 0) {
+            if (text.size() > 0) {
                 int nextByte = 0;
                 std::string subString;
-                while ((int)sourceText.size() - nextByte > 0) {
-                    subString = sourceText.substr(nextByte, nonNullBytesPerInstruction);
+                while ((int)text.size() - nextByte > 0) {
+                    subString = text.substr(nextByte, nonNullBytesPerInstruction);
                     if (nextByte == 0) {
                         // OpSource
                         sourceInst.addStringOperand(subString.c_str());
@@ -2880,6 +2881,12 @@ void Builder::dumpSourceInstructions(std::vector<unsigned int>& out) const
         } else
             sourceInst.dump(out);
     }
+}
+
+// Dump an OpSource[Continued] sequence for the source and every include file
+void Builder::dumpSourceInstructions(std::vector<unsigned int>& out) const
+{
+    dumpSourceInstructions(sourceFileStringId, sourceText, out);
 }
 
 void Builder::dumpInstructions(std::vector<unsigned int>& out, const std::vector<std::unique_ptr<Instruction> >& instructions) const

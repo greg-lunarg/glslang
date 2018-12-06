@@ -658,6 +658,7 @@ public:
     void createAndSetNoPredecessorBlock(const char*);
     void createSelectionMerge(Block* mergeBlock, unsigned int control);
     void dumpSourceInstructions(std::vector<unsigned int>&) const;
+    void dumpSourceInstructions(const spv::Id fileId, const std::string& text, std::vector<unsigned int>&) const;
     void dumpInstructions(std::vector<unsigned int>&, const std::vector<std::unique_ptr<Instruction> >&) const;
     void dumpModuleProcesses(std::vector<unsigned int>&) const;
 
@@ -707,6 +708,9 @@ public:
 
     // map from strings to their string ids
     std::unordered_map<std::string, spv::Id> stringIds;
+
+    // map from include file names to their contents
+    std::unordered_map<std::string, std::string> includeFiles;
 
     // The stream for outputting warnings and errors.
     SpvBuildLogger* logger;
