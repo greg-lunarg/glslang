@@ -667,6 +667,8 @@ public:
     void addSourceText(const char* text) { sourceText = sourceText + text; }
     void filterSourceText(char c) { sourceText.erase(std::remove(sourceText.begin(), sourceText.end(), c), sourceText.end()); }
     const std::string& getSourceText() const { return sourceText; }
+    const std::unordered_map<std::string, std::string>& getIncludeText() { return includeText; }
+    void addIncludeText(const char* name, const char* text) { includeText[name] = text; }
     void addProcesses(const std::vector<std::string>& p)
     {
         for (int i = 0; i < (int)p.size(); ++i)
@@ -813,6 +815,9 @@ protected:
     // source code of shader, useful as part of debug information
     std::string sourceFile;
     std::string sourceText;
+
+    // Included text. First string is a name, second is the included text
+    std::unordered_map<std::string, std::string> includeText;
 
     // for OpModuleProcessed, or equivalent
     TProcesses processes;
