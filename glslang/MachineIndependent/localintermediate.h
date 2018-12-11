@@ -667,7 +667,7 @@ public:
     void addSourceText(const char* text) { sourceText = sourceText + text; }
     void filterSourceText(char c) { sourceText.erase(std::remove(sourceText.begin(), sourceText.end(), c), sourceText.end()); }
     const std::string& getSourceText() const { return sourceText; }
-    const std::unordered_map<std::string, std::string>& getIncludeText() { return includeText; }
+    const std::map<std::string, std::string>& getIncludeText() const { return includeText; }
     void addIncludeText(const char* name, const char* text) { includeText[name] = text; }
     void addProcesses(const std::vector<std::string>& p)
     {
@@ -817,7 +817,7 @@ protected:
     std::string sourceText;
 
     // Included text. First string is a name, second is the included text
-    std::unordered_map<std::string, std::string> includeText;
+    std::map<std::string, std::string> includeText;
 
     // for OpModuleProcessed, or equivalent
     TProcesses processes;

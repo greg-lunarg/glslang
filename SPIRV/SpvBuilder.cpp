@@ -114,20 +114,8 @@ void Builder::setLine(int lineNum, const char* filename)
         currentLine = lineNum;
         currentFile = filename;
         if (emitOpLines) {
-            // If filename previously seen, use its id, else create a string
-            // and put it in the map.
-            auto sItr = stringIds.find(filename);
-            if (sItr != stringIds.end()) {
-                addLine(sItr->second, currentLine, 0);
-            } else {
-                Instruction* fileString =
-                      new Instruction(getUniqueId(), NoType, OpString);
-                fileString->addStringOperand(filename);
-                spv::Id stringId = fileString->getResultId();
-                strings.push_back(std::unique_ptr<Instruction>(fileString));
-                addLine(stringId, currentLine, 0);
-                stringIds[filename] = stringId;
-            }
+            spv::Id strId = getStringId(filename);
+            addLine(strId, currentLine, 0);
         }
     }
 }
@@ -2887,6 +2875,8 @@ void Builder::dumpSourceInstructions(const spv::Id fileId, const std::string& te
 void Builder::dumpSourceInstructions(std::vector<unsigned int>& out) const
 {
     dumpSourceInstructions(sourceFileStringId, sourceText, out);
+    for (auto& inc : includeFiles)
+        dumpSourceInstructions(inc.first, inc.second, out);
 }
 
 void Builder::dumpInstructions(std::vector<unsigned int>& out, const std::vector<std::unique_ptr<Instruction> >& instructions) const

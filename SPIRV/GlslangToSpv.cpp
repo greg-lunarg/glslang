@@ -1285,6 +1285,9 @@ TGlslangToSpvTraverser::TGlslangToSpvTraverser(unsigned int spvVersion, const gl
         text.append(glslangIntermediate->getSourceText());
         builder.setSourceText(text);
         // Pass name and text for all included files
+        const std::map<std::string, std::string>& include_txt = glslangIntermediate->getIncludeText();
+        for (auto& inc : include_txt)
+            builder.addInclude(inc.first, inc.second);
     }
     stdBuiltins = builder.import("GLSL.std.450");
     if (glslangIntermediate->usingVulkanMemoryModel()) {
